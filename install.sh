@@ -33,7 +33,7 @@ sudo apt-get update
 sudo apt-get install -y git ansible
 
 # 3. Clone the repository and run the playbook
-REPO_URL="https://github.com/fcfmc/prep-devsecops-pc.git"
+REPO_URL="https://github.com/fchicout/prep-devsecops-pc.git"
 REPO_DIR="prep-devsecops-pc"
 log "Cloning repository from $REPO_URL..."
 git clone "$REPO_URL"

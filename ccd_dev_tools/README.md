@@ -86,7 +86,7 @@ To run it, simply execute the following commands in your terminal:
 
 ```bash
 # 1. Download the script
-curl -O https://raw.githubusercontent.com/fcfmc/prep-devsecops-pc/main/install.sh
+curl -O https://raw.githubusercontent.com/fchicout/prep-devsecops-pc/main/install.sh
 
 # 2. Make it executable
 chmod +x install.sh
@@ -103,4 +103,4 @@ MIT
 
 ## Author Information
 
-This role was created by fcfmc.
+This role was created by fchicout.
