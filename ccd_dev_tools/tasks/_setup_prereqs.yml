@@ -1,15 +1,47 @@
 ---
-- name: Remove conflicting VS Code repository file if it exists
-  ansible.builtin.file:
-    path: /etc/apt/sources.list.d/vscode.list
-    state: absent
+- name: Find potentially conflicting repository files
+  ansible.builtin.find:
+    paths: /etc/apt/sources.list.d/
+    patterns:
+      - "vscode*"
+      - "microsoft*"
+      - "hashicorp*"
+      - "virtualbox*"
+      - "docker*"
+    file_type: file
+  register: old_repo_files
   become: yes
 
-- name: Remove conflicting VS Code GPG key if it exists
+- name: Remove conflicting repository files
   ansible.builtin.file:
-    path: /usr/share/keyrings/microsoft.gpg
+    path: "{{ item.path }}"
     state: absent
   become: yes
+  loop: "{{ old_repo_files.files }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Find potentially conflicting GPG key files
+  ansible.builtin.find:
+    paths: /etc/apt/keyrings/
+    patterns:
+      - "*docker*"
+      - "*hashicorp*"
+      - "*microsoft*"
+      - "*vscode*"
+      - "*virtualbox*"
+    file_type: file
+  register: old_gpg_files
+  become: yes
+
+- name: Remove conflicting GPG key files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  become: yes
+  loop: "{{ old_gpg_files.files }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Install common prerequisites for external repositories
   ansible.builtin.apt:

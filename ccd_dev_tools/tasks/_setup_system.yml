@@ -1,18 +1,12 @@
 ---
-- name: Attempt to update apt package cache (and ignore failures)
+- name: Update apt package cache with --allow-releaseinfo-change
   ansible.builtin.apt:
     update_cache: yes
-    cache_valid_time: 3600 # Optional: Update cache if it is older than 1 hour
+    # This passes the desired flag directly to the apt-get command.
+    update_cache_args: "--allow-releaseinfo-change"
   become: yes
-  ignore_errors: no
 
 - name: Upgrade all apt packages to the latest version
   ansible.builtin.apt:
     upgrade: dist
   become: yes
-
-- name: Update apt package cache again after cleanup and upgrade
-  ansible.builtin.apt:
-    update_cache: yes
-  become: yes
-  changed_when: false # This task just ensures cache is fresh, doesn't represent a change
