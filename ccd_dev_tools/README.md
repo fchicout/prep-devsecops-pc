@@ -1,38 +1,106 @@
-Role Name
-=========
+# Role: ccd_dev_tools
 
-A brief description of the role goes here.
+This role automates the setup of a complete development environment on Debian-based systems (like Ubuntu). It handles system updates, prerequisite installation, and the setup of essential tools for a DevSecOps workflow.
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This role is designed to run on **Debian-based** Linux distributions (e.g., Ubuntu, Debian).
 
-Role Variables
---------------
+The target machine must have `sudo` access for the user running the playbook, as the role needs to install packages and manage system configuration.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## What This Role Does
 
-Dependencies
-------------
+The role is broken down into logical steps to configure the system:
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+1.  **System Preparation (`_setup_system.yml`)**
+    *   Updates the `apt` package cache.
+    *   Upgrades all installed packages to their latest versions (`apt upgrade dist`).
 
-Example Playbook
-----------------
+2.  **Install Prerequisites (`_setup_prereqs.yml`)**
+    *   Installs essential command-line tools and libraries required by other software, such as `curl`, `git`, `python3-pip`, `htop`, and `gnupg`.
+    *   Cleans up potentially conflicting repository files for VS Code to ensure a clean installation.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+3.  **Install Ansible-related Tools (`_install_ansible_tools.yml`)**
+    *   Installs `ansible-lint` and `yamllint` using `pip` to help with Ansible content development and quality checks.
 
-    - hosts: servers
+4.  **Install Docker (`_install_docker.yml`)**
+    *   Adds the official Docker GPG key and repository.
+    *   Installs Docker Engine, Docker CLI, Containerd, and Docker Compose.
+    *   Adds the current user to the `docker` group to allow running Docker commands without `sudo`. **Note:** The user will need to log out and log back in for this change to take effect.
+
+5.  **Install VirtualBox (`_install_virtualbox.yml`)**
+    *   Adds the Oracle VirtualBox GPG key and repository.
+    *   Installs the latest stable version of VirtualBox (`virtualbox-7.0`).
+
+6.  **Install Vagrant (`_install_vagrant.yml`)**
+    *   Adds the HashiCorp GPG key and repository.
+    *   Installs Vagrant.
+
+7.  **Install Visual Studio Code (`_install_vscode.yml`)**
+    *   Adds the Microsoft GPG key and repository.
+    *   Installs Visual Studio Code.
+
+## Role Variables
+
+This role does not require any specific variables to be set by the user. It is designed to work out-of-the-box.
+
+## Dependencies
+
+This role has no dependencies on other Ansible Galaxy roles.
+
+## Example Playbook
+
+You can use this role in your own playbook to set up a machine.
+
+1.  Create an inventory file (e.g., `inventory.ini`):
+
+    ```ini
+    [workstation]
+    localhost ansible_connection=local
+    ```
+
+2.  Create a playbook file (e.g., `main.yml`):
+
+    ```yaml
+    ---
+    - name: Setup Development Workstation
+      hosts: workstation
+      become: yes
       roles:
-         - { role: username.rolename, x: 42 }
+        - ccd_dev_tools
+    ```
 
-License
--------
+3.  Run the playbook:
 
-BSD
+    ```bash
+    ansible-playbook main.yml -i inventory.ini --ask-become-pass
+    ```
 
-Author Information
-------------------
+    The `--ask-become-pass` flag will prompt you for your `sudo` password to perform the installation tasks.
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## Standalone Execution
+
+This repository includes a convenience script, `install.sh`, to bootstrap the entire process on a fresh machine. It will install Ansible and then execute the playbook automatically.
+
+To run it, simply execute the following commands in your terminal:
+
+```bash
+# 1. Download the script
+curl -O https://raw.githubusercontent.com/fcfmc/prep-devsecops-pc/main/install.sh
+
+# 2. Make it executable
+chmod +x install.sh
+
+# 3. Run the script
+./install.sh
+```
+
+The script will handle checking the OS, installing Ansible, cloning the repository, and running the playbook for you.
+
+## License
+
+MIT
+
+## Author Information
+
+This role was created by fcfmc.
