@@ -14,3 +14,5 @@
 - ansible.builtin.import_tasks: _install_vagrant.yml
 
 - ansible.builtin.import_tasks: _install_vscode.yml
+
+- ansible.builtin.import_tasks: _install_allure.yml

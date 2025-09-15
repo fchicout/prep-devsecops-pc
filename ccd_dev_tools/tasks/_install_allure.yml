@@ -1,0 +1,35 @@
+---
+- name: Ensure OpenJDK is installed
+  ansible.builtin.apt:
+    name: default-jdk
+    state: present
+  become: yes
+
+- name: Check installed Java version
+  ansible.builtin.command:
+    cmd: java -version
+  register: java_version_check
+  changed_when: false
+  failed_when: false # The command writes to stderr, which can be seen as a failure
+
+- name: Set Java major version fact
+  ansible.builtin.set_fact:
+    # Extracts the major version (e.g., 11, 17) from the 'java -version' output.
+    # The regex looks for a pattern like 'version "11.0.21"' or '"1.8.0_392"' and captures the major number.
+    java_major_version: "{{ java_version_check.stderr | regex_search('\"(?:1\\.)?(\\d+)', '\\1') | first | int }}"
+  when: java_version_check.stderr is defined
+
+- name: Install Allure Reports
+  ansible.builtin.apt:
+    deb: https://github.com/allure-framework/allure2/releases/download/2.25.0/allure_2.25.0-1_all.deb
+  become: yes
+  when:
+    - java_major_version is defined
+    - java_major_version | int >= 8
+  vars:
+    # This is a known issue with the allure .deb package. It tries to run a post-install script
+    # that looks for a specific Java path which might not exist with default-jdk.
+    # Setting this environment variable bypasses the problematic check in the script.
+    # See: https://github.com/allure-framework/allure2/issues/1411
+    ansible_env:
+      SKIP_POST_INSTALLATION_HOOKS: "true"
