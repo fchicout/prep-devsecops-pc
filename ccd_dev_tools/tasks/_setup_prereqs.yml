@@ -1,0 +1,36 @@
+---
+- name: Remove conflicting VS Code repository file if it exists
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/vscode.list
+    state: absent
+  become: yes
+
+- name: Remove conflicting VS Code GPG key if it exists
+  ansible.builtin.file:
+    path: /usr/share/keyrings/microsoft.gpg
+    state: absent
+  become: yes
+
+- name: Install common prerequisites for external repositories
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gpg
+      - gnupg
+      - htop
+      - python3-pip
+      - python3-venv
+      - wget
+      - git
+    state: present
+  become: yes
+
+
+- name: Create directory for GPG keys if it does not exist
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes

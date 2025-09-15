@@ -1,0 +1,16 @@
+---
+# tasks file for ccd_dev_tools
+
+- ansible.builtin.import_tasks: _setup_system.yml
+
+- ansible.builtin.import_tasks: _setup_prereqs.yml
+
+- ansible.builtin.import_tasks: _install_ansible_tools.yml
+
+- ansible.builtin.import_tasks: _install_docker.yml
+
+- ansible.builtin.import_tasks: _install_virtualbox.yml
+
+- ansible.builtin.import_tasks: _install_vagrant.yml
+
+- ansible.builtin.import_tasks: _install_vscode.yml

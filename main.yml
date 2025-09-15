@@ -1,0 +1,6 @@
+# playbook.yml
+---
+- name: Prepare DevOps Development PC
+  hosts: localhost
+  roles:
+    - ccd_dev_tools

@@ -1,0 +1,31 @@
+---
+- name: Download Oracle VirtualBox GPG key
+  ansible.builtin.get_url:
+    url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    dest: /tmp/oracle_vbox_2016.asc
+    mode: '0644'
+  become: yes
+
+- name: Dearmor Oracle VirtualBox GPG key
+  ansible.builtin.command:
+    cmd: gpg --dearmor -o /etc/apt/keyrings/oracle-virtualbox-2016.gpg /tmp/oracle_vbox_2016.asc
+    creates: /etc/apt/keyrings/oracle-virtualbox-2016.gpg
+  become: yes
+
+- name: Add Oracle VirtualBox repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian {{ ansible_distribution_release }} contrib"
+    filename: virtualbox
+    state: present
+  become: yes
+
+- name: Update apt cache to recognize new VirtualBox repository
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
+
+- name: Install latest VirtualBox
+  ansible.builtin.apt:
+    name: virtualbox-7.0
+    state: present
+  become: yes

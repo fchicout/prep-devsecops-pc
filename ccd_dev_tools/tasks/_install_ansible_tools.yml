@@ -1,0 +1,8 @@
+---
+- name: Install ansible-lint and yamllint
+  ansible.builtin.apt:
+    name:
+      - ansible-lint
+      - yamllint
+    state: present
+  become: yes
