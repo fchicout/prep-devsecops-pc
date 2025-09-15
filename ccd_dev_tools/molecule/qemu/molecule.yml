@@ -1,0 +1,29 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: vagrant
+  providers:
+    - name: libvirt
+      type: libvirt
+
+platforms:
+  - name: instance-qemu
+    box: generic/debian12
+    provider_options:
+      name: "libvirt"
+
+provisioner:
+  name: ansible
+  playbooks:
+    requirements: requirements.yml
+  inventory:
+    host_vars:
+      instance-qemu:
+        ansible_python_interpreter: /usr/bin/python3
+
+verifier:
+  name: testinfra
+  options:
+    alluredir: .allure/results

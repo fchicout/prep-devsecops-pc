@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check connectivity to the test instance
+      ansible.builtin.ping:
+
+    - name: Include the ccd_dev_tools role
+      ansible.builtin.include_role:
+        name: ccd_dev_tools

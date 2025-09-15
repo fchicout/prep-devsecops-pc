@@ -1,10 +1,9 @@
 ---
-- name: Update apt package cache with --allow-releaseinfo-change
-  ansible.builtin.apt:
-    update_cache: yes
-    # This passes the desired flag directly to the apt-get command.
-    update_cache_args: "--allow-releaseinfo-change"
-  become: yes
+
+- name: Update apt package cache with --allow-releaseinfo-change (shell)
+  ansible.builtin.shell:
+    cmd: apt-get update --allow-releaseinfo-change
+  become: yes  
 
 - name: Upgrade all apt packages to the latest version
   ansible.builtin.apt:
