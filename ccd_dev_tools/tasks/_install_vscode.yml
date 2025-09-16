@@ -9,6 +9,7 @@
 - name: Dearmor Microsoft GPG key
   ansible.builtin.command:
     cmd: gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg /tmp/microsoft.asc
+  args:
     creates: /etc/apt/keyrings/microsoft.gpg
   become: yes
 

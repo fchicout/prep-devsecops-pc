@@ -9,6 +9,7 @@
 - name: Dearmor Docker GPG key
   ansible.builtin.command:
     cmd: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /tmp/docker.asc
+  args:
     creates: /etc/apt/keyrings/docker.gpg
   become: yes
 

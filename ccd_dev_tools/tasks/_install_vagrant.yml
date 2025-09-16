@@ -9,6 +9,7 @@
 - name: Move HashiCorp GPG key to keyrings directory
   ansible.builtin.command:
     cmd: gpg --dearmor -o /etc/apt/keyrings/hashicorp.gpg /tmp/hashicorp.gpg 
+  args:
     creates: /etc/apt/keyrings/hashicorp.gpg
   become: yes
   changed_when: false

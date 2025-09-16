@@ -1,9 +1,10 @@
 ---
 
-- name: Update apt package cache with --allow-releaseinfo-change (shell)
-  ansible.builtin.shell:
-    cmd: apt-get update --allow-releaseinfo-change
-  become: yes  
+- name: Update apt cache if older than one hour
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 # Time in seconds (3600s = 1 hour)
+  become: yes
 
 - name: Upgrade all apt packages to the latest version
   ansible.builtin.apt:

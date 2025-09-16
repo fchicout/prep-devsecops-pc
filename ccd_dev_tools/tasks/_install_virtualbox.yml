@@ -9,6 +9,7 @@
 - name: Dearmor Oracle VirtualBox GPG key
   ansible.builtin.command:
     cmd: gpg --dearmor -o /etc/apt/keyrings/oracle-virtualbox-2016.gpg /tmp/oracle_vbox_2016.asc
+  args:
     creates: /etc/apt/keyrings/oracle-virtualbox-2016.gpg
   become: yes
 
