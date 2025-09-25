@@ -11,4 +11,4 @@ def host(request):
     Pytest fixture to initialize the testinfra backend.
     """
     return testinfra.utils.ansible_runner.AnsibleRunner(
-        os.environ['MOLECULE_INVENTORY_FILE']).get_host('all')
+        os.environ['MOLECULE_INVENTORY_FILE']).get_host('instance-qemu')

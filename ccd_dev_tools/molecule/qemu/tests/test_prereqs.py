@@ -46,14 +46,16 @@ def test_prereq_packages_are_installed(host, pkg_name):
 # --- Test Case 3: Prerequisite Command Availability and Functionality ---
 
 COMMAND_SMOKE_TESTS = {
-    "curl": "curl --version",
-    "gpg": "gpg --version",
-    "htop": "htop --version",
-    "nload": "nload --version",
-    "pip3": "pip3 --version",
-    "wget": "wget --version",
-    "git": "git --version",
-    "python3-venv": "python3 -m venv --help",
+    "curl": {"cmd": "curl --version"},
+    "gpg": {"cmd": "gpg --version"},
+    "htop": {"cmd": "htop --version"},
+    # nload does not have a version flag, so we use --help
+    "nload": {"cmd": "nload --help"},
+    "pip3": {"cmd": "pip3 --version"},
+    "wget": {"cmd": "wget --version"},
+    "git": {"cmd": "git --version"},
+    # python3-venv is not a command, so we only test its functionality
+    "python3": {"cmd": "python3 -m venv --help"},
 }
 
 
@@ -65,10 +67,14 @@ def test_prereq_commands_are_available(host, command_name):
     assert host.find_command(command_name)
 
 
-@pytest.mark.parametrize("version_command", COMMAND_SMOKE_TESTS.values())
-def test_prereq_commands_are_functional(host, version_command):
+@pytest.mark.parametrize("test_config", COMMAND_SMOKE_TESTS.values(), ids=COMMAND_SMOKE_TESTS.keys())
+def test_prereq_commands_are_functional(host, test_config):
     """
     Test Cases 3.1-3.8 (Functionality): Run a smoke test on each command.
     """
-    cmd = host.run(version_command)
-    assert cmd.rc == 0, f"Command '{version_command}' failed with exit code {cmd.rc}"
+    command_to_run = test_config["cmd"]
+    env = test_config.get("env", "")
+    full_command = f"{env} {command_to_run}" if env else command_to_run
+
+    cmd = host.run(full_command)
+    assert cmd.rc == 0, f"Command '{full_command}' failed with exit code {cmd.rc}"
