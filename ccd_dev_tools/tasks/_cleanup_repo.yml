@@ -1,0 +1,30 @@
+---
+- name: "Check for {{ repo_info.repo_name }} repository file"
+  ansible.builtin.stat:
+    path: "/etc/apt/sources.list.d/{{ repo_info.repo_name }}.list"
+  register: repo_file_status
+
+- name: "Check for {{ repo_info.repo_name }} GPG key"
+  ansible.builtin.stat:
+    path: "{{ repo_info.gpg_name }}"
+  register: gpg_key_status
+
+- name: "Remove orphaned {{ repo_info.repo_name }} GPG key"
+  ansible.builtin.file:
+    path: "{{ repo_info.gpg_name }}"
+    state: absent
+  become: yes
+  when:
+    - not repo_file_status.stat.exists
+    - gpg_key_status.stat.exists
+  notify: Update apt cache
+
+- name: "Remove orphaned {{ repo_info.repo_name }} repository file"
+  ansible.builtin.file:
+    path: "/etc/apt/sources.list.d/{{ repo_info.repo_name }}.list"
+    state: absent
+  become: yes
+  when:
+    - repo_file_status.stat.exists
+    - not gpg_key_status.stat.exists
+  notify: Update apt cache

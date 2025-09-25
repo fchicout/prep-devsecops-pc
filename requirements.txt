@@ -28,7 +28,7 @@ mdurl==0.1.2
 molecule==25.1.0
 molecule-plugins==23.7.0
 mypy_extensions==1.1.0
-namedlist==1.8
+# namedlist==1.8
 packaging==25.0
 pathspec==0.12.1
 platformdirs==4.4.0
@@ -36,7 +36,7 @@ pluggy==1.6.0
 pycparser==2.23
 Pygments==2.19.2
 pytest==8.4.2
-pytest-allure-adaptor==1.7.10
+allure-pytest==2.13.5
 pytest-testinfra==10.2.2
 python-vagrant==1.0.0
 PyYAML==6.0.2
@@ -48,6 +48,7 @@ rpds-py==0.27.1
 ruamel.yaml==0.18.15
 ruamel.yaml.clib==0.2.12
 selinux==0.3.0
+setuptools==80.9.0
 six==1.17.0
 subprocess-tee==0.4.2
 testinfra==6.0.0

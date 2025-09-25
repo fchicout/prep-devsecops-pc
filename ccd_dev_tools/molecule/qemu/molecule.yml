@@ -7,12 +7,14 @@ driver:
   providers:
     - name: libvirt
       type: libvirt
+      driver: kvm
 
 platforms:
   - name: instance-qemu
     box: generic/debian12
     provider_options:
-      name: "libvirt"
+      name: libvirt
+    ssh_pub_key: ~/.ssh/id_rsa.pub
 
 provisioner:
   name: ansible

@@ -19,6 +19,11 @@
     java_major_version: "{{ java_version_check.stderr | regex_search('\"(?:1\\.)?(\\d+)', '\\1') | first | int }}"
   when: java_version_check.stderr is defined
 
+- name: Check if Allure is already installed
+  ansible.builtin.stat:
+    path: /opt/allure/bin/allure
+  register: allure_binary
+
 - name: Install Allure Reports
   ansible.builtin.apt:
     deb: https://github.com/allure-framework/allure2/releases/download/2.25.0/allure_2.25.0-1_all.deb
@@ -26,6 +31,7 @@
   when:
     - java_major_version is defined
     - java_major_version | int >= 8
+    - not allure_binary.stat.exists
   vars:
     # This is a known issue with the allure .deb package. It tries to run a post-install script
     # that looks for a specific Java path which might not exist with default-jdk.

@@ -1,2 +1,7 @@
 ---
 # handlers file for ccd_dev_tools
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600 # Time in seconds (3600s = 1 hour)
+  become: yes

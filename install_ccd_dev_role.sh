@@ -40,3 +40,8 @@ git clone "$REPO_URL"
 cd "$REPO_DIR"
 log "Running the Ansible playbook..."
 ansible-playbook main.yml --ask-become-pass -i inventory.ini
+
+# 4. Remove the cloned repository
+cd ..
+log "Removing the cloned repository..."
+rm -rf "$REPO_DIR"  

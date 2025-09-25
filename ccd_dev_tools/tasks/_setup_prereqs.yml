@@ -1,47 +1,13 @@
 ---
-# - name: Find potentially conflicting repository files
-#   ansible.builtin.find:
-#     paths: /etc/apt/sources.list.d/
-#     patterns:
-#       - "vscode*"
-#       - "microsoft*"
-#       - "hashicorp*"
-#       - "virtualbox*"
-#       - "docker*"
-#     file_type: file
-#   register: old_repo_files
-#   become: yes
-
-# - name: Remove conflicting repository files
-#   ansible.builtin.file:
-#     path: "{{ item.path }}"
-#     state: absent
-#   become: yes
-#   loop: "{{ old_repo_files.files }}"
-#   loop_control:
-#     label: "{{ item.path }}"
-
-# - name: Find potentially conflicting GPG key files
-#   ansible.builtin.find:
-#     paths: /etc/apt/keyrings/
-#     patterns:
-#       - "*docker*"
-#       - "*hashicorp*"
-#       - "*microsoft*"
-#       - "*vscode*"
-#       - "*virtualbox*"
-#     file_type: file
-#   register: old_gpg_files
-#   become: yes
-
-# - name: Remove conflicting GPG key files
-#   ansible.builtin.file:
-#     path: "{{ item.path }}"
-#     state: absent
-#   become: yes
-#   loop: "{{ old_gpg_files.files }}"
-#   loop_control:
-#     label: "{{ item.path }}"
+- name: Ensure repository and GPG key states are consistent
+  ansible.builtin.include_tasks: _cleanup_repo.yml
+  loop:
+    - { repo_name: 'docker', gpg_name: '/etc/apt/keyrings/docker.gpg' }
+    - { repo_name: 'hashicorp', gpg_name: '/etc/apt/keyrings/hashicorp.gpg' }
+    - { repo_name: 'vscode', gpg_name: '/usr/share/keyrings/microsoft.gpg' }
+    - { repo_name: 'virtualbox', gpg_name: '/etc/apt/keyrings/oracle-virtualbox-2016.gpg' }
+  loop_control:
+    loop_var: repo_info
 
 - name: Install common prerequisites for external repositories
   ansible.builtin.apt:
@@ -52,6 +18,7 @@
       - gpg
       - gnupg
       - htop
+      - nload
       - python3-pip
       - python3-venv
       - wget

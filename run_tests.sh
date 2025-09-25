@@ -26,9 +26,10 @@ pip install -r requirements.txt
 echo "--- Changing to the Ansible role directory to run Molecule ---"
 cd ccd_dev_tools
 
-echo "--- Starting Molecule test suite for the 'qemu' scenario ---"
-molecule test -s qemu
+# Pass the allure_report_dir variable to molecule, which forwards it to pytest
+molecule test -s qemu -- -e allure_report_dir=./molecule/qemu/.allure/results
 
+echo "--- Starting Molecule test suite for the 'qemu' scenario ---"
 echo "--- Molecule tests completed successfully ---"
 
 # --- 4. Serve Allure Report ---

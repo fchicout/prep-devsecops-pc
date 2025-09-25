@@ -8,22 +8,18 @@
 
 - name: Dearmor Microsoft GPG key
   ansible.builtin.command:
-    cmd: gpg --dearmor -o /etc/apt/keyrings/microsoft.gpg /tmp/microsoft.asc
+    cmd: gpg --dearmor -o /usr/share/keyrings/microsoft.gpg /tmp/microsoft.asc
   args:
-    creates: /etc/apt/keyrings/microsoft.gpg
+    creates: /usr/share/keyrings/microsoft.gpg
   become: yes
 
 - name: Add Visual Studio Code repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
     filename: vscode
     state: present
   become: yes
-
-- name: Update apt cache to recognize new VS Code repository
-  ansible.builtin.apt:
-    update_cache: yes
-  become: yes
+  notify: Update apt cache
 
 - name: Install Visual Studio Code
   ansible.builtin.apt:

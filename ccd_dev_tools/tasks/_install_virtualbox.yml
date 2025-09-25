@@ -19,11 +19,7 @@
     filename: virtualbox
     state: present
   become: yes
-
-- name: Update apt cache to recognize new VirtualBox repository
-  ansible.builtin.apt:
-    update_cache: yes
-  become: yes
+  notify: Update apt cache
 
 - name: Install latest VirtualBox
   ansible.builtin.apt:
