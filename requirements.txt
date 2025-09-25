@@ -28,7 +28,7 @@ mdurl==0.1.2
 molecule==25.1.0
 molecule-plugins==23.7.0
 mypy_extensions==1.1.0
-# namedlist==1.8
+namedlist==1.8
 packaging==25.0
 pathspec==0.12.1
 platformdirs==4.4.0
