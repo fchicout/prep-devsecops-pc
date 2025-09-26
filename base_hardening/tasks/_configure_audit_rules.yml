@@ -1,0 +1,11 @@
+---
+- name: Download and apply auditd ruleset from Neo23x0
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/Neo23x0/auditd/refs/heads/master/audit.rules
+    dest: /etc/audit/audit.rules
+    owner: root
+    group: root
+    mode: '0640'
+    backup: yes
+  become: yes
+  notify: restart auditd
