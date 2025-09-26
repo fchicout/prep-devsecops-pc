@@ -36,7 +36,7 @@ sudo apt-get install -y git ansible
 REPO_URL="https://github.com/fchicout/prep-devsecops-pc.git"
 REPO_DIR="prep-devsecops-pc"
 log "Cloning repository from $REPO_URL..."
-git clone "$REPO_URL"
+git clone --recurse-submodules "$REPO_URL"
 cd "$REPO_DIR"
 log "Running the Ansible playbook for base hardening..."
 ansible-playbook main.yml --ask-become-pass -i inventory.ini
