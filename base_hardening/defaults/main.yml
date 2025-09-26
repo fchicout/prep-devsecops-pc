@@ -1,0 +1,6 @@
+---
+# defaults file for base_hardening
+
+fail2ban_bantime: 1h
+fail2ban_maxretry: 5
+

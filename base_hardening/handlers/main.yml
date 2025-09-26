@@ -1,0 +1,7 @@
+---
+# handlers file for base_hardening
+- name: restart fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: restarted
+

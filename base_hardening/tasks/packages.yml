@@ -1,0 +1,37 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  changed_when: false
+
+- name: Install system and troubleshooting tools
+  ansible.builtin.apt:
+    name:
+      - vim
+      - git
+      - curl
+      - wget
+      - htop
+      - nload
+      - unzip
+      - p7zip-full
+      - lsof
+    state: present
+
+- name: Install networking diagnostic tools
+  ansible.builtin.apt:
+    name:
+      - dnsutils
+      - traceroute
+      - tcpdump
+      - net-tools
+    state: present
+
+- name: Install core security and automation tools
+  ansible.builtin.apt:
+    name:
+      - fail2ban
+      - unattended-upgrades
+      - auditd
+    state: present
+

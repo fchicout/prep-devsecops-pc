@@ -1,0 +1,29 @@
+---
+- name: Set vim as the default system editor
+  ansible.builtin.alternatives:
+    name: editor
+    path: /usr/bin/vim.basic
+
+- name: Configure unattended-upgrades for security updates
+  ansible.builtin.template:
+    src: 50unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Configure Fail2ban jail for SSH
+  ansible.builtin.template:
+    src: fail2ban_jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart fail2ban
+
+- name: Ensure fail2ban service is started and enabled
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: yes
+

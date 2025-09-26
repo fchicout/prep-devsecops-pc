@@ -1,0 +1,9 @@
+---
+# tasks file for base_hardening
+
+- name: Include package installation tasks
+  ansible.builtin.include_tasks: packages.yml
+
+- name: Include system configuration tasks
+  ansible.builtin.include_tasks: configure.yml
+
