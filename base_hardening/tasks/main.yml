@@ -1,9 +1,17 @@
 ---
 # tasks file for base_hardening
 
-- name: Include package installation tasks
-  ansible.builtin.include_tasks: packages.yml
+- name: Update and upgrade system packages
+  ansible.builtin.include_tasks: _setup_system.yml
 
-- name: Include system configuration tasks
+- name: Install auditd for system auditing
+  ansible.builtin.include_tasks: _install_prereqs.yml
+
+- name: Install standard system and security tooling
+  ansible.builtin.include_tasks: _install_std_tooling.yml
+
+- name: Apply system and service configurations
   ansible.builtin.include_tasks: configure.yml
 
+- name: Configure auditd rules for security monitoring
+  ansible.builtin.include_tasks: _configure_audit_rules.yml
