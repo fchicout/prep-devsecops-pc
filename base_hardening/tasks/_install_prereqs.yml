@@ -1,0 +1,6 @@
+---
+- name: Install auditd for system auditing
+  ansible.builtin.apt:
+    name: auditd
+    state: present
+  become: yes

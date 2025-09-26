@@ -1,7 +1,13 @@
 ---
 # handlers file for base_hardening
+- name: restart auditd
+  ansible.builtin.service:
+    name: auditd
+    state: restarted
+  become: yes
+
 - name: restart fail2ban
   ansible.builtin.service:
     name: fail2ban
     state: restarted
-
+  become: yes
